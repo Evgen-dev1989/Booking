@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,5 +19,9 @@ Route::get('/', function () {
 });
 
 Auth::routes();
+Route::get('/home','App\Http\Controllers\LocationController@loc')->name('home');
+Route::post('/home','App\Http\Controllers\LocationController@store1')->name('home');
+Route::get('/home/{id}','App\Http\Controllers\LocationController@calculate')->name('form');
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+//Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

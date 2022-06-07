@@ -5,9 +5,30 @@ namespace App\Http\Controllers;
 use App\Http\Resources\LocRes;
 use App\Models\Location;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class LocationController extends Controller
 {
+    public function loc(){
+        $data = DB::table('locations')
+            ->join('blocks', 'locations.id', '=', 'blocks.location_id')
+            ->select('Locations.*', 'blocks.freeBlocks', 'blocks.volume','blocks.temperature','blocks.shelfLife','Locations.id')
+            ->get();
+
+        return view('booking', ['data' => $data]); }
+
+
+    public function calculate($id){
+        //$data = new Location();
+        $data=DB::table('locations')->select('Locations.*', 'blocks.freeBlocks', 'blocks.volume','blocks.temperature','blocks.shelfLife','Locations.id')->join('blocks',function ($join) {
+            $join->on('locations.id', '=', 'blocks.id');
+            $join->on('locations.Locations.', '=', 'blocks.freeBlocks');
+            //$join->on('check.subject', '=', 'appeal.subject');
+        })->where('locations.id',$id)->get();
+       return view('form',['data'=>$data->find($id)]);}
+
+
+
     /**
      * Display a listing of the resource.
      *
