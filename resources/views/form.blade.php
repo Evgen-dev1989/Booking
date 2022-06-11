@@ -1,5 +1,6 @@
 @extends('layouts.app')
 
+
     <div class="container mt-4 alert alert-info ">
         <form action="/home" method="post" >
             {{ csrf_field() }}

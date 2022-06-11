@@ -2,13 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\BlockRequest;
 use App\Http\Resources\LocRes;
+use App\Models\Block;
 use App\Models\Location;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class LocationController extends Controller
 {
+    public function userBooking()
+    {
+        $users = DB::table('users')->get();
+
+        return view('userBooking', ['users' => $users]);
+    }
+
     public function loc(){
         $data = DB::table('locations')
             ->join('blocks', 'locations.id', '=', 'blocks.location_id')
@@ -19,14 +28,18 @@ class LocationController extends Controller
 
 
     public function calculate($id){
-        //$data = new Location();
-        $data=DB::table('locations')->select('Locations.*', 'blocks.freeBlocks', 'blocks.volume','blocks.temperature','blocks.shelfLife','Locations.id')->join('blocks',function ($join) {
-            $join->on('locations.id', '=', 'blocks.id');
-            $join->on('locations.Locations.', '=', 'blocks.freeBlocks');
-            //$join->on('check.subject', '=', 'appeal.subject');
-        })->where('locations.id',$id)->get();
-       return view('form',['data'=>$data->find($id)]);}
+        $data = new Location();
+        return view('form', ['data' => $data]); }
 
+    public function store1()
+    {
+        $loc = new Block();
+        $loc->volume=request('volume');
+        $loc->temperature=request('temperature');
+        $loc->shelfLife=request('shelfLife');
+        $loc->save();
+        return redirect('/home');
+    }
 
 
     /**
@@ -53,11 +66,18 @@ class LocationController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(BlockRequest $request)
     {
-        //
+        $vol = $request->input('volume');
+        $data = DB::table('blocks')->pluck('freeBlocks');
+        $freeBlocks='freeBlocks';
+        $volume=$vol/2;
+        if ($volume<$freeBlocks){
+            echo 'мало блоков';
+        }else{return view('booking'); }
+
     }
 
     /**

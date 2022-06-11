@@ -10,6 +10,6 @@ class Location extends Model
     protected $fillable =['Location','id','location_id'];
 
     public function lists(){
-        return $this->hasMany(Block::class);
+        return $this->hasMany(Block::class,'id','id');
     }
 }

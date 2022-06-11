@@ -10,5 +10,5 @@ class Block extends Model
     protected $fillable =['Location','id','location_id'];
 
     public function lists(){
-        return $this->belongsTo(Location::class);}
+        return $this->belongsTo(Location::class,'id','id');}
 }
