@@ -6,6 +6,7 @@ use App\Http\Requests\BlockRequest;
 use App\Http\Resources\LocRes;
 use App\Models\Block;
 use App\Models\Location;
+use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -27,10 +28,6 @@ class LocationController extends Controller
         return view('booking', ['data' => $data]); }
 
 
-    public function calculate($id){
-        $data = new Location();
-        return view('form', ['data' => $data]); }
-
     public function store1()
     {
         $loc = new Block();
@@ -38,7 +35,17 @@ class LocationController extends Controller
         $loc->temperature=request('temperature');
         $loc->shelfLife=request('shelfLife');
         $loc->save();
-        return redirect('/home');
+        return redirect('/locations');
+    }
+    public function store2($request) {
+        $vol = $request->input('volume');
+        $data = DB::table('blocks')->pluck('freeBlocks');
+        $freeBlocks='freeBlocks';
+        $volume=$vol/2;
+        if ($volume<$freeBlocks){
+            echo 'Не хватает свободных блоков';
+        }
+        else{return view('booking'); }
     }
 
 
@@ -66,18 +73,12 @@ class LocationController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
+     * @return LocRes
      */
     public function store(BlockRequest $request)
     {
-        $vol = $request->input('volume');
-        $data = DB::table('blocks')->pluck('freeBlocks');
-        $freeBlocks='freeBlocks';
-        $volume=$vol/2;
-        if ($volume<$freeBlocks){
-            echo 'мало блоков';
-        }else{return view('booking'); }
-
+        $block= Location::create($request->validated());
+        return new LocRes($block);
     }
 
     /**
@@ -107,11 +108,12 @@ class LocationController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Location  $location
-     * @return \Illuminate\Http\Response
+     * @return void
      */
-    public function update(Request $request, Location $location)
+    public function update( BlockRequest $request, Location $location)
     {
-        //
+        $location->update($request->validated());
+        return LocRes($location);
     }
 
     /**
@@ -122,6 +124,11 @@ class LocationController extends Controller
      */
     public function destroy(Location $location)
     {
-        //
+        $location->delete();
+        return response(null,\Illuminate\Http\Response::HTTP_NO_CONTENT);
+
     }
+
+
+
 }

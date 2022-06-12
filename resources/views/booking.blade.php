@@ -23,7 +23,7 @@
                         <p>{{$el->Location}}</p>
                         <div  class="container mt-4 ">@csrf
                             <input type="text" class="form-control" name="volume" id="" PLACEHOLDER="объем"><br>
-                            <a href="{{\App\Http\Controllers\LocationController::class,'store'}}"><button class="btn btn-success" >Calculate</button></a>
+                            <a href="{{\App\Http\Controllers\LocationController::class,'store2'}}"><button class="btn btn-success" >Calculate</button></a>
 
                             <input type="text" class="form-control" name="temperature" id="" PLACEHOLDER="температура" ><br>
                             <input type="text" class="form-control" name="shelfLife " id=" " PLACEHOLDER="срок хранения" ><br>
@@ -41,6 +41,6 @@
 @endforeach
 
 <div>
-    <a href="{{route('user',$el->id)}}">All your Booking</a>
+    <a href="{{route('userBooking',$el->id)}}"><button class="btn btn-success">My bookings</button></a>
 </div>
 

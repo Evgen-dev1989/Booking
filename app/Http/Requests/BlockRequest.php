@@ -13,7 +13,7 @@ class BlockRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -27,6 +27,7 @@ class BlockRequest extends FormRequest
             'temperature' => 'required|integer|max:2,min:-2',
             'shelfLife' => 'require|integer|min:1,max:24',
             'volume' => 'require|integer|min:1,max:24',
+            'Location'=>'require|max:255'
         ];
     }
 }

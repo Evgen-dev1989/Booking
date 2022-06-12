@@ -18,12 +18,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/home/user','App\Http\Controllers\LocationController@userBooking')->name('user');
+Route::get('/locations/user','App\Http\Controllers\LocationController@userBooking')->name('userBooking');
 
 Auth::routes();
-Route::get('/home','App\Http\Controllers\LocationController@loc')->name('home');
-Route::post('/home','App\Http\Controllers\LocationController@store1')->name('home');
-Route::get('/home/{id}','App\Http\Controllers\LocationController@calculate')->name('form');
+Route::get('/locations','App\Http\Controllers\LocationController@loc')->name('locations');
+Route::post('/locations','App\Http\Controllers\LocationController@store1')->name('locations');
+
 
 
 //Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
